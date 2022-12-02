@@ -24,9 +24,9 @@ for (i in 1:n) {
 locTable <- table(salaries$company_location)
 for (i in 1:n){
   # If country has >10 inputs in table, keep original name
-  if (locTable[names(locTable)==salaries$company_location[i]] > 10) salaries[i, "editedLocation"] = salaries$company_location[i]
+  if (locTable[names(locTable)==salaries$company_location[i]] > 10) salaries[i, "edited_location"] = salaries$company_location[i]
   # Else change it to "Other"
-  else salaries[i, "editedLocation"] = "Other"
+  else salaries[i, "edited_location"] = "Other"
 }
 
 ui <- fluidPage(
@@ -42,7 +42,7 @@ ui <- fluidPage(
                   list("Red", "Blue", "Green")),
       selectInput("variable", "Choose a Variable:",
                   list(`Numeric` = list("USD Salary"="salary_in_usd"),
-                       `Categorical` = list("Job Group"="job_group", "Salary Currencies"="salary_currency", "Experience Level"="experience_level", "Location"="editedLocation"))),
+                       `Categorical` = list("Job Group"="job_group", "Salary Currencies"="salary_currency", "Experience Level"="experience_level", "Location"="edited_location"))),
       img(src='mlimage.jpg', align = "left")
     ),
     mainPanel(
@@ -75,7 +75,7 @@ server <- function(input, output){
     var <- input$variable
     
     if (typeof(salaries[[var]])=="integer"){
-      cat("Mean: ",mean(salaries[[var]]),"\n","Five number summary", fivenum(salaries[[var]]))
+      cat("Mean: ",mean(salaries[[var]]),"\n","Five number summary:", fivenum(salaries[[var]]))
     }
     else if (typeof(salaries[[var]]) == "character"){
       table(salaries[[var]])
