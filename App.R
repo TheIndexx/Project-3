@@ -38,6 +38,8 @@ ui <- fluidPage(
                   min = 0,
                   max = 600000,
                   value = 150000),
+      selectInput("color", "Graph color:",
+                  list("Red", "Blue", "Green")),
       selectInput("variable", "Choose a Variable:",
                   list(`Numeric` = list("USD Salary"="salary_in_usd"),
                        `Categorical` = list("Job Group"="job_group", "Salary Currencies"="salary_currency", "Experience Level"="experience_level", "Location"="editedLocation"))),
@@ -60,11 +62,11 @@ server <- function(input, output){
     
     if(typeof(salaries[[var]])=="integer"){
       options(scipen=10)
-      hist(salaries[[var]], main='Distribution of Salaries', xlab='Salary in USD', xlim=c(0, input$slry), breaks = 25*(max(salaries[[var]])-min(salaries[[var]]))/(input$slry))
+      hist(salaries[[var]], main='Distribution of Salaries', xlab='Salary in USD', xlim=c(0, input$slry), breaks = 25*(max(salaries[[var]])-min(salaries[[var]]))/(input$slry), col = input$color)
     }
     
     else if(typeof(salaries[[var]]) == "character"){
-      barplot(table(salaries[[var]]), main='Distribution of Job Groups', xlab='Job Groups')
+      barplot(table(salaries[[var]]), main='Distribution of Job Groups', xlab='Job Groups', col = input$color)
     }
   })
   
