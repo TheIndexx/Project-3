@@ -62,11 +62,11 @@ server <- function(input, output){
     
     if(typeof(salaries[[var]])=="integer"){
       options(scipen=10)
-      hist(salaries[[var]], main='Distribution of Salaries', xlab='Salary in USD', xlim=c(0, input$slry), breaks = 25*(max(salaries[[var]])-min(salaries[[var]]))/(input$slry), col = input$color)
+      hist(salaries[[var]], main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), xlim=c(0, input$slry), breaks = 25*(max(salaries[[var]])-min(salaries[[var]]))/(input$slry), col = input$color)
     }
     
     else if(typeof(salaries[[var]]) == "character"){
-      barplot(table(salaries[[var]]), main='Distribution of Job Groups', xlab='Job Groups', col = input$color)
+      barplot(table(salaries[[var]]), main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), col = input$color)
     }
   })
   
