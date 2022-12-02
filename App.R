@@ -1,7 +1,7 @@
 library(shiny)
 library(tidyverse)
 
-salaries <- read.csv("C:\\Rishi\\college\\SDS313\\Project3\\salaries.csv")
+salaries <- read.csv("salaries.csv")
 
 ## Create a variable that groups jobs
 n <- nrow(salaries)
