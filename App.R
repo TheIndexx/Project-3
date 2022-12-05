@@ -30,21 +30,32 @@ for (i in 1:n){
 }
 
 ui <- fluidPage(
+  
   titlePanel("Salaries of Data Scientists"),
+  
   sidebarLayout(
+    
     sidebarPanel(
+      # Slider for numeric
       sliderInput("slry",
                   "Salary in USD",
                   min = 0,
                   max = 600000,
                   value = 150000),
+      
+      # Color input
       selectInput("color", "Graph color:",
                   list("Red", "Blue", "Green")),
+      
+      # Variable input
       selectInput("variable", "Choose a Variable:",
                   list(`Numeric` = list("USD Salary"="salary_in_usd"),
                        `Categorical` = list("Job Group"="job_group", "Salary Currencies"="salary_currency", "Experience Level"="experience_level", "Location"="edited_location"))),
+      
+      # IMAGE
       img(src='mlimage.jpg', align = "left")
     ),
+    
     mainPanel(
       plotOutput("distPlot"),
       br(),
@@ -53,24 +64,25 @@ ui <- fluidPage(
   )
 )
 
-# Problem, scale isnt continuous
 server <- function(input, output){
   
-
+  # Render graph: histogram or barplot depending on type of variable
   output$distPlot <- renderPlot({
     var <- input$variable
     
+    # If numeric var, use histogram
     if(typeof(salaries[[var]])=="integer"){
       options(scipen=10)
       hist(salaries[[var]], main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), xlim=c(0, input$slry), breaks = 25*(max(salaries[[var]])-min(salaries[[var]]))/(input$slry), col = input$color)
     }
     
+    # If categorical var, use barplot
     else if(typeof(salaries[[var]]) == "character"){
       barplot(table(salaries[[var]]), main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), col = input$color)
     }
   })
   
-  # Mean (num) or table (cat)
+  # Descriptive Stats: Mean (numeric) or table (categorical)
   output$descr <- renderPrint({
     var <- input$variable
     
