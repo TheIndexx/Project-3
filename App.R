@@ -69,28 +69,30 @@ server <- function(input, output){
   # Render graph: histogram or barplot depending on type of variable
   output$distPlot <- renderPlot({
     var <- input$variable
+    new_salaries <- subset(salaries, salary_in_usd <= input$slry)
     
     # If numeric var, use histogram
-    if(typeof(salaries[[var]])=="integer"){
+    if(typeof(new_salaries[[var]])=="integer"){
       options(scipen=10)
-      hist(salaries[[var]], main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), xlim=c(0, input$slry), breaks = 25*(max(salaries[[var]])-min(salaries[[var]]))/(input$slry), col = input$color)
+      hist(new_salaries[[var]], main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), xlim=c(0, input$slry), breaks = 25*(max(new_salaries[[var]])-min(new_salaries[[var]]))/(input$slry), col = input$color)
     }
     
     # If categorical var, use barplot
-    else if(typeof(salaries[[var]]) == "character"){
-      barplot(table(salaries[[var]]), main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), col = input$color)
+    else if(typeof(new_salaries[[var]]) == "character"){
+      barplot(table(new_salaries[[var]]), main=str_to_title(gsub('_', ' ', var)), xlab=str_to_title(gsub('_', ' ', var)), col = input$color)
     }
   })
   
   # Descriptive Stats: Mean (numeric) or table (categorical)
   output$descr <- renderPrint({
     var <- input$variable
+    new_salaries <- subset(salaries, salary_in_usd <= input$slry)
     
-    if (typeof(salaries[[var]])=="integer"){
-      cat("Mean: ",mean(salaries[[var]]),"\n","Five number summary:", fivenum(salaries[[var]]))
+    if (typeof(new_salaries[[var]])=="integer"){
+      cat("Mean: ",mean(new_salaries[[var]]),"\n","Five number summary:", fivenum(new_salaries[[var]]))
     }
-    else if (typeof(salaries[[var]]) == "character"){
-      table(salaries[[var]])
+    else if (typeof(new_salaries[[var]]) == "character"){
+      table(new_salaries[[var]])
     }
   })
 }
